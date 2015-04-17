@@ -1,5 +1,7 @@
 (function() {
 
+  'use strict';
+
   function alert(ALERT, $timeout, $rootScope) {
     return {
       restrict: 'E',

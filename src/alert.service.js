@@ -1,5 +1,7 @@
 (function() {
 
+  'use strict';
+
   angular
     .module('angular-alert-banner')
     .service('AlertService', [

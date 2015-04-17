@@ -1,5 +1,7 @@
 (function() {
 
+  'use strict';
+
   /**
   * Angular alert banner
   */
