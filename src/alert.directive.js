@@ -2,7 +2,7 @@
 
   'use strict';
 
-  function alert(ALERT, $timeout, $rootScope) {
+  function alert(ALERT, $timeout, $rootScope, AlertBanner) {
     return {
       restrict: 'E',
       templateUrl: '/partials/components/alert.template.html',
@@ -12,7 +12,7 @@
             queue = [];
 
         $scope.alert = {};
-        $scope.className = ALERT.CLASS_NAME;
+        $scope.className = AlertBanner.getClassName();
 
         $scope.close = close;
 
@@ -23,12 +23,12 @@
          * @return {void}
          */
         function close() {
-          if ($el[0].querySelector('.' + ALERT.CLASS_NAME).classList.contains('active')) {
+          if ($el[0].querySelector('.' + AlertBanner.getClassName()).classList.contains('active')) {
             clearQueue();
-            $el[0].querySelector('.' + ALERT.CLASS_NAME).classList.remove('active');
+            $el[0].querySelector('.' + AlertBanner.getClassName()).classList.remove('active');
             $timeout(function() {
               $scope.alert = {};
-            }, ALERT.DURATIONS.ANIMATION);
+            }, AlertBanner.getAnimationDuration());
           }
         }
 
@@ -44,12 +44,12 @@
           angular.extend($scope.alert, _config);
           angular.extend($scope.alert, data);
 
-          $el[0].querySelector('.' + ALERT.CLASS_NAME).classList.add('active');
+          $el[0].querySelector('.' + AlertBanner.getClassName()).classList.add('active');
 
           if ($scope.alert.autoClose) {
             queue.push($timeout(function() {
               close();
-            }, ALERT.DURATIONS.TIMING));
+            }, AlertBanner.getAnimationDuration()));
           }
         }
 
@@ -72,6 +72,7 @@
       'ALERT',
       '$timeout',
       '$rootScope',
+      'AlertBanner',
       alert
     ])
   ;
