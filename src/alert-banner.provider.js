@@ -127,7 +127,7 @@
 
   angular
     .module('angular-alert-banner')
-    .provider('AlertBannerProvider', AlertBannerProvider)
+    .provider('AlertBanner', AlertBannerProvider)
   ;
 
 }());
