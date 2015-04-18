@@ -6,6 +6,8 @@
  */
 (function() {
 
+  'use strict';
+
   /**
   * Angular alert banner
   */
@@ -20,7 +22,6 @@
   angular
     .module('angular-alert-banner')
     .constant('ALERT', {
-      CLASS_NAME: 'alert-message',
       EVENTS: {
         PREFIX: 'alert:',
         TYPES: {
@@ -31,10 +32,6 @@
         SUCCESS: 'success',
         INFO: 'info',
         ERROR: 'error'
-      },
-      DURATIONS: {
-        ANIMATION: 250,
-        TIMING: 5000
       }
     })
   ;
@@ -42,115 +39,231 @@
 }());
 (function() {
 
-  function alert(ALERT, $timeout, $rootScope) {
-    return {
-      restrict: 'E',
-      templateUrl: '/partials/components/alert.template.html',
-      link: function($scope, $el) {
+  'use strict';
 
-        var _config = { autoClose: true },
-            queue = [];
+  /**
+   * @name   AlertBanner
+   * @desc   <alert-banner> directive
+   * @param  {constant}    ALERT
+   * @param  {$timeout}    $timeout
+   * @param  {$rootScope}  $rootScope
+   * @param  {AlertBanner} AlertBanner
+   */
+  function AlertBannerDirective(ALERT, $timeout, $rootScope, AlertBanner) {
 
-        $scope.alert = {};
-        $scope.className = ALERT.CLASS_NAME;
+    /**
+     * @name   link
+     * @desc   link function for alert banner directive
+     * @param  {$scope}   $scope
+     * @param  {$element} $el
+     */
+    function link($scope, $el) {
 
-        $scope.close = close;
+      var _config = { autoClose: true };
+      var queue = [];
 
-        $scope.$on(ALERT.EVENTS.PREFIX + ALERT.EVENTS.TYPES.PUBLISH, onMessage);
+      $scope.alert = {};
+      $scope.className = AlertBanner.getClassName();
 
-        /**
-         * Close alert message
-         * @return {void}
-         */
-        function close() {
-          if ($el[0].querySelector('.' + ALERT.CLASS_NAME).classList.contains('active')) {
-            clearQueue();
-            $el[0].querySelector('.' + ALERT.CLASS_NAME).classList.remove('active');
-            $timeout(function() {
-              $scope.alert = {};
-            }, ALERT.DURATIONS.ANIMATION);
-          }
-        }
+      $scope.close = close;
 
-        /**
-         * Callback for event alert:publish
-         * @param  {event}  event
-         * @param  {object} data
-         * @return {void}
-         */
-        function onMessage(event, data) {
+      $scope.$on(ALERT.EVENTS.PREFIX + ALERT.EVENTS.TYPES.PUBLISH, onMessage);
+
+      /**
+       * Close alert message
+       * @return {void}
+       */
+      function close() {
+        if ($el[0].querySelector('.' + AlertBanner.getClassName()).classList.contains('active')) {
           clearQueue();
-
-          angular.extend($scope.alert, _config);
-          angular.extend($scope.alert, data);
-
-          $el[0].querySelector('.' + ALERT.CLASS_NAME).classList.add('active');
-
-          if ($scope.alert.autoClose) {
-            queue.push($timeout(function() {
-              close();
-            }, ALERT.DURATIONS.TIMING));
-          }
-        }
-
-        /**
-         * Clear queue for alert timer
-         * @return {void}
-         */
-        function clearQueue() {
-          queue.forEach(function(promise) {
-            $timeout.cancel(promise);
-          });
+          $el[0].querySelector('.' + AlertBanner.getClassName()).classList.remove('active');
+          $timeout(function() {
+            $scope.alert = {};
+          }, AlertBanner.getAnimationDuration());
         }
       }
+
+      /**
+       * Callback for event alert:publish
+       * @param  {event}  event
+       * @param  {object} data
+       * @return {void}
+       */
+      function onMessage(event, data) {
+        clearQueue();
+
+        angular.extend($scope.alert, _config);
+        angular.extend($scope.alert, data);
+
+        $el[0].querySelector('.' + AlertBanner.getClassName()).classList.add('active');
+
+        if ($scope.alert.autoClose) {
+          queue.push($timeout(function() {
+            close();
+          }, AlertBanner.getAnimationDuration()));
+        }
+      }
+
+      /**
+       * Clear queue for alert timer
+       * @return {void}
+       */
+      function clearQueue() {
+        queue.forEach(function(promise) {
+          $timeout.cancel(promise);
+        });
+      }
+    }
+
+    return {
+      restrict: 'E',
+      templateUrl: '/partials/components/alert-banner.template.html',
+      link: link
     };
   }
 
   angular
     .module('angular-alert-banner')
-    .directive('alert', [
+    .directive('alertBanner', [
       'ALERT',
       '$timeout',
       '$rootScope',
-      alert
+      'AlertBanner',
+      AlertBannerDirective
     ])
   ;
 
 }());
 (function() {
 
-  angular
-    .module('angular-alert-banner')
-    .service('AlertService', [
-      'ALERT',
-      '$rootScope',
-      AlertService
-    ])
-  ;
+  'use strict';
 
-  /**
-   * Alert service for dispatch events alert
-   * @param {object}     ALERT
-   * @param {$rootScope} $rootScope
-   */
-  function AlertService(ALERT, $rootScope) {
+   /**
+    * @name AlertBannerProvider
+    * @desc Provider for alert banner
+    */
+  function AlertBannerProvider() {
 
-    var vm = this;
+    var AlertBanner = {};
 
-    vm.TYPES = ALERT.TYPES;
+    var className = 'alert-message';
 
-    vm.publish = publish;
+    var timeCollapse = 5000;
+    var animationDuration = 250;
+
+    this.setClassName = setClassName;
+    this.setTimeCollapse = setTimeCollapse;
+    this.setAnimationDuration = setAnimationDuration;
+
+    this.$get = $get;
 
     /**
-     * Publish events to alert controller
-     * @param  {object} params
-     * @param  {object} params.type
-     * @param  {object} params.message
-     * @return {void}
+     * @name  setClassName
+     * @param {string} value
+     * return AlertBannerProvider
      */
-    function publish(params) {
-      $rootScope.$broadcast(ALERT.EVENTS.PREFIX + ALERT.EVENTS.TYPES.PUBLISH, params);
+    function setClassName(value) {
+      /* jshint validthis: true */
+      if (typeof value !== 'string') {
+        throw new Error('String value is provide for parameter className');
+      }
+
+      className = value;
+
+      return this;
     }
+
+    /**
+     * @name  setTimeCollapse
+     * @param {string} value
+     * return AlertBannerProvider
+     */
+    function setTimeCollapse(value) {
+      /* jshint validthis: true */
+      if (typeof value !== 'number') {
+        throw new Error('Number value is provide for parameter timeCollapse');
+      }
+
+      timeCollapse = value;
+
+      return this;
+    }
+
+    /**
+     * @name  setAnimationDuration
+     * @param {string} value
+     * return AlertBannerProvider
+     */
+    function setAnimationDuration(value) {
+      /* jshint validthis: true */
+      if (typeof value !== 'number') {
+        throw new Error('Number value is provide for parameter animationDuration');
+      }
+
+      animationDuration = value;
+
+      return this;
+    }
+
+    /**
+     * @name   $get
+     * @desc   AlertBanner factory for dispatch events alert
+     * @param  {constant}   ALERT
+     * @param  {$rootScope} $rootScope
+     */
+    $get.$inject = ['ALERT', '$rootScope'];
+    function $get(ALERT, $rootScope) {
+
+      AlertBanner.publish = publish;
+
+      AlertBanner.getClassName = getClassName;
+      AlertBanner.getTimeCollapse = getTimeCollapse;
+      AlertBanner.getAnimationDuration = getAnimationDuration;
+
+      return AlertBanner;
+
+      /**
+       * @name   publish
+       * @desc   Publish events to alert controller
+       * @param  {object} params
+       * @param  {object} params.type
+       * @param  {object} params.message
+       */
+      function publish(params) {
+        $rootScope.$broadcast(ALERT.EVENTS.PREFIX + ALERT.EVENTS.TYPES.PUBLISH, params);
+      }
+
+      /**
+       * @name   getClassName
+       * @return {string}
+       */
+      function getClassName() {
+        return className;
+      }
+
+      /**
+       * @name   getTimeCollapse
+       * @return {integer}
+       */
+      function getTimeCollapse() {
+        return timeCollapse;
+      }
+
+      /**
+       * @name   getAnimationDuration
+       * @return {integer}
+       */
+      function getAnimationDuration() {
+        return animationDuration;
+      }
+
+    }
+
   }
+
+  angular
+    .module('angular-alert-banner')
+    .provider('AlertBanner', AlertBannerProvider)
+  ;
 
 }());
