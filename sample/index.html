@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular alert banner - Sample</title>
+  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <style>
+    .jumbotron {
+      margin-top: 150px;
+    }
+  </style>
+</head>
+<body ng-controller="AppController as vm">
+  <div class="container">
+    <div class="jumbotron">
+      <h2>Angular Alert Banner</h2>
+      <p>Click on the link for display the banner !</p>
+      <p>
+        <a class="btn btn-primary btn-lg" href="#" role="button">Alert !</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/bower_components/angular/angular.min.js"></script>
+  <script src="/dist/angular-alert-banner.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
