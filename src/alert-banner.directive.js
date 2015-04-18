@@ -78,7 +78,7 @@
 
     return {
       restrict: 'E',
-      templateUrl: '/partials/components/alert.template.html',
+      templateUrl: '/partials/components/alert-banner.template.html',
       link: link
     };
   }
