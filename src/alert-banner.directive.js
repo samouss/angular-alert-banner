@@ -10,7 +10,7 @@
    * @param  {$rootScope}  $rootScope
    * @param  {AlertBanner} AlertBanner
    */
-  function AlertBanner(ALERT, $timeout, $rootScope, AlertBanner) {
+  function AlertBannerDirective(ALERT, $timeout, $rootScope, AlertBanner) {
 
     /**
      * @name   link
@@ -90,7 +90,7 @@
       '$timeout',
       '$rootScope',
       'AlertBanner',
-      AlertBanner
+      AlertBannerDirective
     ])
   ;
 
