@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var browserSync = require('browser-sync');
 var path = require('path');
 var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
@@ -12,6 +13,7 @@ var del = require('del');
 var notify = require('gulp-notify');
 var pkg = require('./package.json');
 var header = require('gulp-header');
+var argv = require('minimist')(process.argv.slice(2));
 
 var banner = ['/**',
   ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -72,7 +74,27 @@ gulp.task('js', ['lint'], function() {
     })))
     .pipe(header(banner, { pkg : pkg } ))
     .pipe(gulp.dest(defaults.build_dir))
+    .pipe(browserSync.reload({ stream: true }))
   ;
+});
+
+// Serve task
+gulp.task('serve', function() {
+
+  browserSync.init({
+    open: (typeof argv.browser !== 'undefined' && !argv.browser) ? false : true,
+    server: {
+      baseDir: './sample/',
+      routes: {
+        '/bower_components': 'bower_components',
+        '/dist': 'dist'
+      }
+    }
+  });
+
+  gulp.watch(path.join(defaults.js.source_dir, '/*.*.js'), ['js']);
+  gulp.watch('./sample/*.*').on('change', browserSync.reload);
+
 });
 
 // --------------------------------
