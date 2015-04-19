@@ -11,12 +11,22 @@
   </style>
 </head>
 <body ng-controller="AppController as vm">
+
+  <!-- alert banner custom element -->
+  <alert-banner></alert-banner>
+  <!-- alert banner custom element -->
+
   <div class="container">
     <div class="jumbotron">
       <h2>Angular Alert Banner</h2>
       <p>Click on the link for display the banner !</p>
       <p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Alert !</a>
+        <a
+          href="#"
+          class="btn btn-primary btn-lg"
+          role="button"
+          ng-click="vm.display('Success message')"
+        >Alert !</a>
       </p>
     </div>
   </div>

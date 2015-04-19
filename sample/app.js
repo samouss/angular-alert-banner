@@ -5,7 +5,22 @@
    * @param {[type]} AlertBanner [description]
    */
   function AppController(AlertBanner) {
-    console.log('AppController');
+
+    var vm = this;
+
+    vm.display = display;
+
+    /**
+     * @name   display
+     * @param  {string} message
+     */
+    function display(message) {
+      AlertBanner.publish({
+        type: AlertBanner.TYPES.SUCCESS,
+        message: message
+      });
+    }
+
   }
 
   angular
