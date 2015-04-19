@@ -61,7 +61,7 @@
         if ($scope.alert.autoClose) {
           queue.push($timeout(function() {
             close();
-          }, AlertBanner.getAnimationDuration()));
+          }, AlertBanner.getTimeCollapse()));
         }
       }
 
@@ -78,7 +78,7 @@
 
     return {
       restrict: 'E',
-      templateUrl: '/partials/components/alert-banner.template.html',
+      templateUrl: 'alert-banner.template.html',
       link: link
     };
   }
