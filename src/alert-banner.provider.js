@@ -78,6 +78,8 @@
     $get.$inject = ['ALERT', '$rootScope'];
     function $get(ALERT, $rootScope) {
 
+      AlertBanner.TYPES = ALERT.TYPES;
+
       AlertBanner.publish = publish;
 
       AlertBanner.getClassName = getClassName;
