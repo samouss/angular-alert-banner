@@ -14,6 +14,8 @@ var notify = require('gulp-notify');
 var pkg = require('./package.json');
 var header = require('gulp-header');
 var argv = require('minimist')(process.argv.slice(2));
+var ngHtml2Js = require("gulp-ng-html2js");
+var es = require('event-stream');
 
 var banner = ['/**',
   ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -29,6 +31,12 @@ var defaults = {
   build_dir : 'dist/',
 
   // JS default config
+  partials : {
+    // path source files
+    source_dir : 'src/',
+  },
+
+  // JS default config
   js : {
     // path source files
     source_dir : 'src/',
@@ -39,9 +47,15 @@ var defaults = {
 
 };
 
-// Lint task
-gulp.task('lint', function() {
-  return gulp.src(path.join(defaults.js.source_dir, '/*.js'))
+// JS task
+function js() {
+  var files = [];
+
+  files.push(path.join(defaults.js.source_dir, '*.module.js'));
+  files.push(path.join(defaults.js.source_dir, '*.js'));
+
+  return gulp.src(files)
+    .pipe(plumber())
     .pipe(jshint())
     .pipe(notify(function (file) {
       if (!file.jshint.success) {
@@ -54,19 +68,24 @@ gulp.task('lint', function() {
         return file.relative + " (" + file.jshint.results.length + " errors)\n" + errors;
       }
     }))
+    .pipe(concat(defaults.js.dest_app_filename))
   ;
-});
+}
+
+// Partials task
+function partials() {
+  return gulp.src(path.join(defaults.partials.source_dir, '*.html'))
+    .pipe(ngHtml2Js({
+      moduleName: function(file) {
+        return path.basename(file.path, '.template.html') + '/' + path.basename(file.path);
+      }
+    }))
+  ;
+}
 
 // JS task - require lint
-gulp.task('js', ['lint'], function() {
-
-  var files = [];
-
-  files.push(path.join(defaults.js.source_dir, '/*.module.js'));
-  files.push(path.join(defaults.js.source_dir, '/*.*.js'));
-
-  return gulp.src(files)
-    .pipe(plumber())
+gulp.task('js', function() {
+  return es.merge(js(), partials())
     .pipe(concat(defaults.js.dest_app_filename))
     .pipe(gulpif(argv.prod !== undefined, uglify()))
     .pipe(gulpif(argv.prod !== undefined, rename(function(filepath) {
@@ -74,7 +93,6 @@ gulp.task('js', ['lint'], function() {
     })))
     .pipe(header(banner, { pkg : pkg } ))
     .pipe(gulp.dest(defaults.build_dir))
-    .pipe(browserSync.reload({ stream: true }))
   ;
 });
 
