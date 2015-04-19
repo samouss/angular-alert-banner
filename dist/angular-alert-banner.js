@@ -4,6 +4,30 @@
  * @link https://github.com/samouss/angular-alert-banner
  * @license MIT
  */
+(function(module) {
+try {
+  module = angular.module('alert-banner/alert-banner.template.html');
+} catch (e) {
+  module = angular.module('alert-banner/alert-banner.template.html', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('alert-banner.template.html',
+    '<div\n' +
+    '  class="{{ ::className }} {{ alert.type }}"\n' +
+    '>\n' +
+    '  <div class="container">\n' +
+    '    <div class="row">\n' +
+    '      <p>{{ alert.message }}</p>\n' +
+    '      <a\n' +
+    '        href=""\n' +
+    '        ng-click="close()"\n' +
+    '      >X</a>\n' +
+    '    </div>\n' +
+    '  </div>\n' +
+    '</div>');
+}]);
+})();
+
 (function() {
 
   'use strict';
@@ -13,6 +37,7 @@
   */
   angular
     .module('angular-alert-banner', [
+      'alert-banner/alert-banner.template.html'
     ])
   ;
 
@@ -100,7 +125,7 @@
         if ($scope.alert.autoClose) {
           queue.push($timeout(function() {
             close();
-          }, AlertBanner.getAnimationDuration()));
+          }, AlertBanner.getTimeCollapse()));
         }
       }
 
@@ -117,7 +142,7 @@
 
     return {
       restrict: 'E',
-      templateUrl: '/partials/components/alert-banner.template.html',
+      templateUrl: 'alert-banner.template.html',
       link: link
     };
   }
@@ -213,6 +238,8 @@
      */
     $get.$inject = ['ALERT', '$rootScope'];
     function $get(ALERT, $rootScope) {
+
+      AlertBanner.TYPES = ALERT.TYPES;
 
       AlertBanner.publish = publish;
 
