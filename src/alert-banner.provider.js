@@ -15,6 +15,8 @@
 
     var timeCollapse = 5000;
     var autoClose = true;
+    var onOpen = function() {};
+    var onClose = function() {};
 
     this.setClassName = setClassName;
     this.setAnimationDuration = setAnimationDuration;
@@ -141,7 +143,9 @@
       function getDefaultOptions() {
         return {
           timeCollapse: timeCollapse,
-          autoClose: autoClose
+          autoClose: autoClose,
+          onOpen: onOpen,
+          onClose: onClose
         };
       }
 

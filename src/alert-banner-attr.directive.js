@@ -23,11 +23,29 @@
        * @name   onClick
        */
       function onClick() {
+        var options = {};
+
+        options.type = $scope.type;
+        options.message = $scope.message;
+
+        if (typeof $scope.autoClose !== 'undefined') {
+          options.autoClose = $scope.autoClose;
+        }
+
+        if (typeof $scope.timeCollapse !== 'undefined') {
+          options.timeCollapse = $scope.timeCollapse;
+        }
+
+        if (typeof $scope.onOpen !== 'undefined') {
+          options.onOpen = $scope.onOpen;
+        }
+
+        if (typeof $scope.onClose !== 'undefined') {
+          options.onClose = $scope.onClose;
+        }
+
         $scope.$apply(function() {
-          AlertBanner.publish({
-            type: $scope.type,
-            message: $scope.message
-          });
+          AlertBanner.publish(options);
         });
       }
 
@@ -35,10 +53,12 @@
 
     return {
       scope: {
-        message: '@',
         type: '@',
+        message: '@',
         autoClose: '@?',
-        timeCollapse: '@?'
+        timeCollapse: '@?',
+        onOpen: '&?',
+        onClose: '&?'
       },
       restrict: 'A',
       link: link
