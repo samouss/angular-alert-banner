@@ -41,7 +41,7 @@
           $el[0].querySelector('.' + AlertBanner.getClassName()).classList.remove('active');
           $timeout(function() {
             angular.copy(_options, $scope.alert);
-          }, $scope.alert.animationDuration);
+          }, AlertBanner.getAnimationDuration());
         }
       }
 

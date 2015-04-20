@@ -100,6 +100,7 @@
 
       AlertBanner.publish = publish;
       AlertBanner.getClassName = getClassName;
+      AlertBanner.getAnimationDuration = getAnimationDuration;
 
       AlertBanner.getDefaultOptions = getDefaultOptions;
 
@@ -125,13 +126,20 @@
       }
 
       /**
+       * @name   getAnimationDuration
+       * @return {string}
+       */
+      function getAnimationDuration() {
+        return animationDuration;
+      }
+
+      /**
        * @name   getDefaultOptions
        * @return {object}
        */
       function getDefaultOptions() {
         return {
           timeCollapse: timeCollapse,
-          animationDuration: animationDuration,
           autoClose: autoClose
         };
       }
