@@ -111,6 +111,7 @@ gulp.task('js', function() {
     })))
     .pipe(header(banner, { pkg : pkg } ))
     .pipe(gulp.dest(defaults.build_dir))
+    .pipe(browserSync.reload({stream:true}))
   ;
 });
 
@@ -144,7 +145,7 @@ gulp.task('serve', ['default'], function() {
   });
 
   gulp.watch(path.join(defaults.js.source_dir, '/*.*.js'), ['js']);
-  gulp.watch(path.join(defaults.sass.source_dir, '/*.*.scss'), ['sass']);
+  gulp.watch(path.join(defaults.sass.source_dir, '/*.scss'), ['sass']);
   gulp.watch('./sample/*.*').on('change', browserSync.reload);
 
 });
