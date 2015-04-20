@@ -5,12 +5,12 @@
   /**
    * @name   AlertBanner
    * @desc   <alert-banner> directive
-   * @param  {constant}    ALERT
+   * @param  {constant}    ALERT_BANNER
    * @param  {$timeout}    $timeout
    * @param  {$rootScope}  $rootScope
    * @param  {AlertBanner} AlertBanner
    */
-  function AlertBannerDirective(ALERT, $timeout, $rootScope, AlertBanner) {
+  function AlertBannerDirective(ALERT_BANNER, $timeout, $rootScope, AlertBanner) {
 
     /**
      * @name   link
@@ -28,7 +28,7 @@
 
       $scope.close = close;
 
-      $scope.$on(ALERT.EVENTS.PREFIX + ALERT.EVENTS.TYPES.PUBLISH, onMessage);
+      $scope.$on(ALERT_BANNER.EVENTS.PREFIX + ALERT_BANNER.EVENTS.TYPES.PUBLISH, onMessage);
 
       /**
        * Close alert message
@@ -86,7 +86,7 @@
   angular
     .module('angular-alert-banner')
     .directive('alertBanner', [
-      'ALERT',
+      'ALERT_BANNER',
       '$timeout',
       '$rootScope',
       'AlertBanner',

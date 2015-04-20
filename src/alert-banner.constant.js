@@ -2,7 +2,7 @@
 
   angular
     .module('angular-alert-banner')
-    .constant('ALERT', {
+    .constant('ALERT_BANNER', {
       EVENTS: {
         PREFIX: 'alert:',
         TYPES: {

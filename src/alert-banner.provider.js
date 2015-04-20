@@ -72,13 +72,13 @@
     /**
      * @name   $get
      * @desc   AlertBanner factory for dispatch events alert
-     * @param  {constant}   ALERT
+     * @param  {constant}   ALERT_BANNER
      * @param  {$rootScope} $rootScope
      */
-    $get.$inject = ['ALERT', '$rootScope'];
-    function $get(ALERT, $rootScope) {
+    $get.$inject = ['ALERT_BANNER', '$rootScope'];
+    function $get(ALERT_BANNER, $rootScope) {
 
-      AlertBanner.TYPES = ALERT.TYPES;
+      AlertBanner.TYPES = ALERT_BANNER.TYPES;
 
       AlertBanner.publish = publish;
 
@@ -96,7 +96,7 @@
        * @param  {object} params.message
        */
       function publish(params) {
-        $rootScope.$broadcast(ALERT.EVENTS.PREFIX + ALERT.EVENTS.TYPES.PUBLISH, params);
+        $rootScope.$broadcast(ALERT_BANNER.EVENTS.PREFIX + ALERT_BANNER.EVENTS.TYPES.PUBLISH, params);
       }
 
       /**
