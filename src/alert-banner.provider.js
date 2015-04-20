@@ -11,14 +11,15 @@
     var AlertBanner = {};
 
     var className = 'alert-message';
+    var animationDuration = 250;
 
     var timeCollapse = 5000;
-    var animationDuration = 250;
     var autoClose = true;
 
     this.setClassName = setClassName;
-    this.setTimeCollapse = setTimeCollapse;
     this.setAnimationDuration = setAnimationDuration;
+
+    this.setTimeCollapse = setTimeCollapse;
     this.setAutoClose = setAutoClose;
 
     this.$get = $get;
