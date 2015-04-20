@@ -20,10 +20,11 @@
      */
     function link($scope, $el) {
 
-      var _config = { autoClose: true };
+      var _options = AlertBanner.getDefaultOptions();
       var queue = [];
 
       $scope.alert = {};
+      angular.copy(_options, $scope.alert);
       $scope.className = AlertBanner.getClassName();
 
       $scope.close = close;
@@ -39,8 +40,8 @@
           clearQueue();
           $el[0].querySelector('.' + AlertBanner.getClassName()).classList.remove('active');
           $timeout(function() {
-            $scope.alert = {};
-          }, AlertBanner.getAnimationDuration());
+            angular.copy(_options, $scope.alert);
+          }, $scope.alert.animationDuration);
         }
       }
 
@@ -53,7 +54,6 @@
       function onMessage(event, data) {
         clearQueue();
 
-        angular.extend($scope.alert, _config);
         angular.extend($scope.alert, data);
 
         $el[0].querySelector('.' + AlertBanner.getClassName()).classList.add('active');
@@ -61,7 +61,7 @@
         if ($scope.alert.autoClose) {
           queue.push($timeout(function() {
             close();
-          }, AlertBanner.getTimeCollapse()));
+          }, $scope.alert.timeCollapse));
         }
       }
 
