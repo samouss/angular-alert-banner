@@ -1,6 +1,6 @@
 // Variables
 $alert-banner-font-color: #FFF !default;
-$alert-banner-height: 50px !default;
+$alert-banner-height: 65px !default;
 $alert-banner-info: #337ab7 !default;
 $alert-banner-success: #5cb85c !default;
 $alert-banner-error: #d9534f !default;
@@ -9,7 +9,7 @@ $alert-banner-error: #d9534f !default;
 .alert-message {
   width: 100%;
   position: fixed;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   line-height: $alert-banner-height;
   height: 0;
   top: 0;
