@@ -18,13 +18,15 @@
     background: #5cb85c; }
   .alert-message.error {
     background: #d9534f; }
-  .alert-message > p {
+  .alert-message p {
     display: inline;
     margin: 0; }
-  .alert-message > a {
+  .alert-message a {
     float: right;
     color: #FFF; }
-  .alert-message > a > i {
+    .alert-message a:hover, .alert-message a:active {
+      text-decoration: none; }
+  .alert-message a > i {
     vertical-align: -3px; }
 
 

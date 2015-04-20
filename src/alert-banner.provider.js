@@ -14,10 +14,12 @@
 
     var timeCollapse = 5000;
     var animationDuration = 250;
+    var autoClose = true;
 
     this.setClassName = setClassName;
     this.setTimeCollapse = setTimeCollapse;
     this.setAnimationDuration = setAnimationDuration;
+    this.setAutoClose = setAutoClose;
 
     this.$get = $get;
 
@@ -70,6 +72,22 @@
     }
 
     /**
+     * @name  setAutoClose
+     * @param {boolean} value
+     * return AlertBannerProvider
+     */
+    function setAutoClose(value) {
+      /* jshint validthis: true */
+      if (typeof value !== 'boolean') {
+        throw new Error('Boolean value is provide for parameter autoClose');
+      }
+
+      autoClose = value;
+
+      return this;
+    }
+
+    /**
      * @name   $get
      * @desc   AlertBanner factory for dispatch events alert
      * @param  {constant}   ALERT_BANNER
@@ -81,10 +99,10 @@
       AlertBanner.TYPES = ALERT_BANNER.TYPES;
 
       AlertBanner.publish = publish;
-
       AlertBanner.getClassName = getClassName;
-      AlertBanner.getTimeCollapse = getTimeCollapse;
       AlertBanner.getAnimationDuration = getAnimationDuration;
+
+      AlertBanner.getDefaultOptions = getDefaultOptions;
 
       return AlertBanner;
 
@@ -108,19 +126,22 @@
       }
 
       /**
-       * @name   getTimeCollapse
-       * @return {integer}
-       */
-      function getTimeCollapse() {
-        return timeCollapse;
-      }
-
-      /**
        * @name   getAnimationDuration
-       * @return {integer}
+       * @return {string}
        */
       function getAnimationDuration() {
         return animationDuration;
+      }
+
+      /**
+       * @name   getDefaultOptions
+       * @return {object}
+       */
+      function getDefaultOptions() {
+        return {
+          timeCollapse: timeCollapse,
+          autoClose: autoClose
+        };
       }
 
     }

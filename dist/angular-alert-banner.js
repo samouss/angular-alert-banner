@@ -84,10 +84,11 @@ module.run(['$templateCache', function($templateCache) {
      */
     function link($scope, $el) {
 
-      var _config = { autoClose: true };
+      var _options = AlertBanner.getDefaultOptions();
       var queue = [];
 
       $scope.alert = {};
+      angular.copy(_options, $scope.alert);
       $scope.className = AlertBanner.getClassName();
 
       $scope.close = close;
@@ -103,7 +104,7 @@ module.run(['$templateCache', function($templateCache) {
           clearQueue();
           $el[0].querySelector('.' + AlertBanner.getClassName()).classList.remove('active');
           $timeout(function() {
-            $scope.alert = {};
+            angular.copy(_options, $scope.alert);
           }, AlertBanner.getAnimationDuration());
         }
       }
@@ -117,7 +118,6 @@ module.run(['$templateCache', function($templateCache) {
       function onMessage(event, data) {
         clearQueue();
 
-        angular.extend($scope.alert, _config);
         angular.extend($scope.alert, data);
 
         $el[0].querySelector('.' + AlertBanner.getClassName()).classList.add('active');
@@ -125,7 +125,7 @@ module.run(['$templateCache', function($templateCache) {
         if ($scope.alert.autoClose) {
           queue.push($timeout(function() {
             close();
-          }, AlertBanner.getTimeCollapse()));
+          }, $scope.alert.timeCollapse));
         }
       }
 
@@ -175,10 +175,12 @@ module.run(['$templateCache', function($templateCache) {
 
     var timeCollapse = 5000;
     var animationDuration = 250;
+    var autoClose = true;
 
     this.setClassName = setClassName;
     this.setTimeCollapse = setTimeCollapse;
     this.setAnimationDuration = setAnimationDuration;
+    this.setAutoClose = setAutoClose;
 
     this.$get = $get;
 
@@ -231,6 +233,22 @@ module.run(['$templateCache', function($templateCache) {
     }
 
     /**
+     * @name  setAutoClose
+     * @param {boolean} value
+     * return AlertBannerProvider
+     */
+    function setAutoClose(value) {
+      /* jshint validthis: true */
+      if (typeof value !== 'boolean') {
+        throw new Error('Boolean value is provide for parameter autoClose');
+      }
+
+      autoClose = value;
+
+      return this;
+    }
+
+    /**
      * @name   $get
      * @desc   AlertBanner factory for dispatch events alert
      * @param  {constant}   ALERT_BANNER
@@ -242,10 +260,10 @@ module.run(['$templateCache', function($templateCache) {
       AlertBanner.TYPES = ALERT_BANNER.TYPES;
 
       AlertBanner.publish = publish;
-
       AlertBanner.getClassName = getClassName;
-      AlertBanner.getTimeCollapse = getTimeCollapse;
       AlertBanner.getAnimationDuration = getAnimationDuration;
+
+      AlertBanner.getDefaultOptions = getDefaultOptions;
 
       return AlertBanner;
 
@@ -269,19 +287,22 @@ module.run(['$templateCache', function($templateCache) {
       }
 
       /**
-       * @name   getTimeCollapse
-       * @return {integer}
-       */
-      function getTimeCollapse() {
-        return timeCollapse;
-      }
-
-      /**
        * @name   getAnimationDuration
-       * @return {integer}
+       * @return {string}
        */
       function getAnimationDuration() {
         return animationDuration;
+      }
+
+      /**
+       * @name   getDefaultOptions
+       * @return {object}
+       */
+      function getDefaultOptions() {
+        return {
+          timeCollapse: timeCollapse,
+          autoClose: autoClose
+        };
       }
 
     }
