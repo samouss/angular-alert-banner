@@ -46,7 +46,7 @@ module.run(['$templateCache', function($templateCache) {
 
   angular
     .module('angular-alert-banner')
-    .constant('ALERT', {
+    .constant('ALERT_BANNER', {
       EVENTS: {
         PREFIX: 'alert:',
         TYPES: {
@@ -69,12 +69,12 @@ module.run(['$templateCache', function($templateCache) {
   /**
    * @name   AlertBanner
    * @desc   <alert-banner> directive
-   * @param  {constant}    ALERT
+   * @param  {constant}    ALERT_BANNER
    * @param  {$timeout}    $timeout
    * @param  {$rootScope}  $rootScope
    * @param  {AlertBanner} AlertBanner
    */
-  function AlertBannerDirective(ALERT, $timeout, $rootScope, AlertBanner) {
+  function AlertBannerDirective(ALERT_BANNER, $timeout, $rootScope, AlertBanner) {
 
     /**
      * @name   link
@@ -92,7 +92,7 @@ module.run(['$templateCache', function($templateCache) {
 
       $scope.close = close;
 
-      $scope.$on(ALERT.EVENTS.PREFIX + ALERT.EVENTS.TYPES.PUBLISH, onMessage);
+      $scope.$on(ALERT_BANNER.EVENTS.PREFIX + ALERT_BANNER.EVENTS.TYPES.PUBLISH, onMessage);
 
       /**
        * Close alert message
@@ -150,7 +150,7 @@ module.run(['$templateCache', function($templateCache) {
   angular
     .module('angular-alert-banner')
     .directive('alertBanner', [
-      'ALERT',
+      'ALERT_BANNER',
       '$timeout',
       '$rootScope',
       'AlertBanner',
@@ -233,13 +233,13 @@ module.run(['$templateCache', function($templateCache) {
     /**
      * @name   $get
      * @desc   AlertBanner factory for dispatch events alert
-     * @param  {constant}   ALERT
+     * @param  {constant}   ALERT_BANNER
      * @param  {$rootScope} $rootScope
      */
-    $get.$inject = ['ALERT', '$rootScope'];
-    function $get(ALERT, $rootScope) {
+    $get.$inject = ['ALERT_BANNER', '$rootScope'];
+    function $get(ALERT_BANNER, $rootScope) {
 
-      AlertBanner.TYPES = ALERT.TYPES;
+      AlertBanner.TYPES = ALERT_BANNER.TYPES;
 
       AlertBanner.publish = publish;
 
@@ -257,7 +257,7 @@ module.run(['$templateCache', function($templateCache) {
        * @param  {object} params.message
        */
       function publish(params) {
-        $rootScope.$broadcast(ALERT.EVENTS.PREFIX + ALERT.EVENTS.TYPES.PUBLISH, params);
+        $rootScope.$broadcast(ALERT_BANNER.EVENTS.PREFIX + ALERT_BANNER.EVENTS.TYPES.PUBLISH, params);
       }
 
       /**
