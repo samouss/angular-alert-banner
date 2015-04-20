@@ -16,6 +16,8 @@ var header = require('gulp-header');
 var argv = require('minimist')(process.argv.slice(2));
 var ngHtml2Js = require("gulp-ng-html2js");
 var es = require('event-stream');
+var sass = require('gulp-ruby-sass');
+var minifyCSS = require('gulp-minify-css');
 
 var banner = ['/**',
   ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -29,6 +31,18 @@ var defaults = {
 
   // build dir
   build_dir : 'dist/',
+
+  // JS default config
+  sass : {
+    // path source files
+    source_dir : 'src/assets/sass/',
+
+    // main file for sass
+    main_file : 'alert-banner.scss',
+
+    // destination file name
+    dest_file_name : 'angular-alert-banner'
+  },
 
   // JS default config
   partials : {
@@ -82,8 +96,12 @@ function partials() {
     }))
   ;
 }
+// Clean task
+gulp.task('clean', function() {
+  del.sync(defaults.build_dir);
+});
 
-// JS task - require lint
+// JS task
 gulp.task('js', function() {
   return es.merge(js(), partials())
     .pipe(concat(defaults.js.dest_app_filename))
@@ -96,8 +114,23 @@ gulp.task('js', function() {
   ;
 });
 
+// SASS task
+gulp.task('sass', function() {
+  return sass(path.join(defaults.sass.source_dir, defaults.sass.main_file), {
+      sourcemap: true
+    })
+    .pipe(plumber())
+    .pipe(gulpif(argv.prod !== undefined, minifyCSS()))
+    .pipe(rename({
+      basename: defaults.sass.dest_file_name
+    }))
+    .pipe(gulp.dest(defaults.build_dir))
+    .pipe(browserSync.reload({stream:true}))
+  ;
+});
+
 // Serve task
-gulp.task('serve', function() {
+gulp.task('serve', ['default'], function() {
 
   browserSync.init({
     open: (typeof argv.browser !== 'undefined' && !argv.browser) ? false : true,
@@ -111,10 +144,11 @@ gulp.task('serve', function() {
   });
 
   gulp.watch(path.join(defaults.js.source_dir, '/*.*.js'), ['js']);
+  gulp.watch(path.join(defaults.sass.source_dir, '/*.*.scss'), ['sass']);
   gulp.watch('./sample/*.*').on('change', browserSync.reload);
 
 });
 
 // --------------------------------
 
-gulp.task('default', ['js']);
+gulp.task('default', ['clean', 'js', 'sass']);
