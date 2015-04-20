@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Angular alert banner - Sample</title>
   <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/dist/angular-alert-banner.css">
   <style>
     .jumbotron {
       margin-top: 150px;
@@ -21,12 +22,28 @@
       <h2>Angular Alert Banner</h2>
       <p>Click on the link for display the banner !</p>
       <p>
+
         <a
           href="#"
           class="btn btn-primary btn-lg"
           role="button"
-          ng-click="vm.display('Success message')"
-        >Alert !</a>
+          ng-click="vm.display(vm.TYPES.INFO, 'Info message')"
+        >Alert info !</a>
+
+        <a
+          href="#"
+          class="btn btn-success btn-lg"
+          role="button"
+          ng-click="vm.display(vm.TYPES.SUCCESS, 'Success message')"
+        >Alert success !</a>
+
+        <a
+          href="#"
+          class="btn btn-danger btn-lg"
+          role="button"
+          ng-click="vm.display(vm.TYPES.ERROR, 'Error message')"
+        >Alert error !</a>
+
       </p>
     </div>
   </div>

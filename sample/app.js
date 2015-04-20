@@ -8,15 +8,18 @@
 
     var vm = this;
 
+    vm.TYPES = AlertBanner.TYPES;
+
     vm.display = display;
 
     /**
      * @name   display
+     * @param  {string} type
      * @param  {string} message
      */
-    function display(message) {
+    function display(type, message) {
       AlertBanner.publish({
-        type: AlertBanner.TYPES.SUCCESS,
+        type: type,
         message: message
       });
     }
