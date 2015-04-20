@@ -67,11 +67,29 @@ module.run(['$templateCache', function($templateCache) {
        * @name   onClick
        */
       function onClick() {
+        var options = {};
+
+        options.type = $scope.type;
+        options.message = $scope.message;
+
+        if (typeof $scope.autoClose !== 'undefined') {
+          options.autoClose = $scope.autoClose;
+        }
+
+        if (typeof $scope.timeCollapse !== 'undefined') {
+          options.timeCollapse = $scope.timeCollapse;
+        }
+
+        if (typeof $scope.onOpen !== 'undefined') {
+          options.onOpen = $scope.onOpen;
+        }
+
+        if (typeof $scope.onClose !== 'undefined') {
+          options.onClose = $scope.onClose;
+        }
+
         $scope.$apply(function() {
-          AlertBanner.publish({
-            type: $scope.type,
-            message: $scope.message
-          });
+          AlertBanner.publish(options);
         });
       }
 
@@ -79,10 +97,12 @@ module.run(['$templateCache', function($templateCache) {
 
     return {
       scope: {
-        message: '@',
         type: '@',
+        message: '@',
         autoClose: '@?',
-        timeCollapse: '@?'
+        timeCollapse: '@?',
+        onOpen: '&?',
+        onClose: '&?'
       },
       restrict: 'A',
       link: link
@@ -160,6 +180,7 @@ module.run(['$templateCache', function($templateCache) {
           clearQueue();
           $el[0].querySelector('.' + AlertBanner.getClassName()).classList.remove('active');
           $timeout(function() {
+            $scope.alert.onClose();
             angular.copy(_options, $scope.alert);
           }, AlertBanner.getAnimationDuration());
         }
@@ -177,6 +198,10 @@ module.run(['$templateCache', function($templateCache) {
         angular.extend($scope.alert, data);
 
         $el[0].querySelector('.' + AlertBanner.getClassName()).classList.add('active');
+
+        $timeout(function() {
+          $scope.alert.onOpen();
+        }, AlertBanner.getAnimationDuration());
 
         if ($scope.alert.autoClose) {
           queue.push($timeout(function() {
@@ -232,6 +257,8 @@ module.run(['$templateCache', function($templateCache) {
 
     var timeCollapse = 5000;
     var autoClose = true;
+    var onOpen = function() {};
+    var onClose = function() {};
 
     this.setClassName = setClassName;
     this.setAnimationDuration = setAnimationDuration;
@@ -358,7 +385,9 @@ module.run(['$templateCache', function($templateCache) {
       function getDefaultOptions() {
         return {
           timeCollapse: timeCollapse,
-          autoClose: autoClose
+          autoClose: autoClose,
+          onOpen: onOpen,
+          onClose: onClose
         };
       }
 
