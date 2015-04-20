@@ -11,6 +11,7 @@
     vm.TYPES = AlertBanner.TYPES;
 
     vm.display = display;
+    vm.displayWithCallback = displayWithCallback;
 
     /**
      * @name   display
@@ -21,6 +22,24 @@
       AlertBanner.publish({
         type: type,
         message: message
+      });
+    }
+
+    /**
+     * @name   displayWithCallback
+     * @param  {string} type
+     * @param  {string} message
+     */
+    function displayWithCallback(type, message) {
+      AlertBanner.publish({
+        type: type,
+        message: message,
+        onOpen: function() {
+          console.log('Callback on open');
+        },
+        onClose: function() {
+          console.log('Callback on close');
+        }
       });
     }
 

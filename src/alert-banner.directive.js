@@ -40,6 +40,7 @@
           clearQueue();
           $el[0].querySelector('.' + AlertBanner.getClassName()).classList.remove('active');
           $timeout(function() {
+            $scope.alert.onClose();
             angular.copy(_options, $scope.alert);
           }, AlertBanner.getAnimationDuration());
         }
@@ -57,6 +58,10 @@
         angular.extend($scope.alert, data);
 
         $el[0].querySelector('.' + AlertBanner.getClassName()).classList.add('active');
+
+        $timeout(function() {
+          $scope.alert.onOpen();
+        }, AlertBanner.getAnimationDuration());
 
         if ($scope.alert.autoClose) {
           queue.push($timeout(function() {
