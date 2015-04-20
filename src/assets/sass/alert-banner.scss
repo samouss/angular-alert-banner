@@ -31,15 +31,20 @@ $alert-banner-error: #d9534f !default;
   &.error {
     background: $alert-banner-error;
   }
-  > p {
+  p {
     display: inline;
     margin: 0;
   }
-  > a {
+  a {
     float: right;
     color: $alert-banner-font-color;
+
+    &:hover,
+    &:active {
+      text-decoration: none;
+    }
   }
-  > a > i {
+  a > i {
     vertical-align: -3px;
   }
 }
