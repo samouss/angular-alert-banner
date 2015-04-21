@@ -125,6 +125,10 @@ gulp.task('sass', function() {
     .pipe(rename({
       basename: defaults.sass.dest_file_name
     }))
+    .pipe(gulpif(argv.prod !== undefined, rename(function(filepath) {
+      filepath.basename += '.min';
+    })))
+    .pipe(header(banner, { pkg : pkg } ))
     .pipe(gulp.dest(defaults.build_dir))
     .pipe(browserSync.reload({stream:true}))
   ;
@@ -152,4 +156,4 @@ gulp.task('serve', ['default'], function() {
 
 // --------------------------------
 
-gulp.task('default', ['clean', 'js', 'sass']);
+gulp.task('default', ['js', 'sass']);
