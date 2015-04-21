@@ -15,6 +15,7 @@
 
     var timeCollapse = 5000;
     var autoClose = true;
+
     var onOpen = function() {};
     var onClose = function() {};
 
@@ -111,10 +112,14 @@
 
       /**
        * @name   publish
-       * @desc   Publish events to alert controller
-       * @param  {object} params
-       * @param  {object} params.type
-       * @param  {object} params.message
+       * @desc   Publish    dispatch event to handle directive
+       * @param  {object}   params
+       * @param  {string}   params.type
+       * @param  {string}   params.message
+       * @param  {integer}  params.timeCollapse
+       * @param  {boolean}  params.autoClose
+       * @param  {function} params.onOpen
+       * @param  {function} params.onClose
        */
       function publish(params) {
         $rootScope.$broadcast(ALERT_BANNER.EVENTS.PREFIX + ALERT_BANNER.EVENTS.TYPES.PUBLISH, params);
