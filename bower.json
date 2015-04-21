@@ -13,7 +13,10 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "sample",
+    "gulpfile.js",
+    "package.json"
   ],
   "dependencies": {
     "angular": "~1.3.15"
