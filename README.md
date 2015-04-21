@@ -8,7 +8,7 @@ See demo [here](http://samouss.github.io/angular-alert-banner/#)
 
 Choose your prefer methods for installation:
 
-* via bower: `bower install --save git@github.com:samouss/angular-alert-banner.git`
+* via bower: `bower install --save angular-alert-banner`
 * via Github: [angular-alert-banner](https://github.com/samouss/angular-alert-banner/archive/master.zip)
 
 Then add files to your index:
