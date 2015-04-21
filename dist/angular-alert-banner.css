@@ -1,3 +1,9 @@
+/**
+ * angular-alert-banner - Angular module for display alert as banner
+ * @version v1.0.0
+ * @link https://github.com/samouss/angular-alert-banner
+ * @license MIT
+ */
 .alert-message {
   width: 100%;
   position: fixed;

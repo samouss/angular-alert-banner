@@ -164,7 +164,6 @@ module.run(['$templateCache', function($templateCache) {
       var queue = [];
 
       $scope.alert = {};
-      angular.copy(_options, $scope.alert);
       $scope.className = AlertBanner.getClassName();
 
       $scope.close = close;
@@ -179,10 +178,10 @@ module.run(['$templateCache', function($templateCache) {
         if ($el[0].querySelector('.' + AlertBanner.getClassName()).classList.contains('active')) {
           clearQueue();
           $el[0].querySelector('.' + AlertBanner.getClassName()).classList.remove('active');
-          $timeout(function() {
+          queue.push($timeout(function() {
             $scope.alert.onClose();
             angular.copy(_options, $scope.alert);
-          }, AlertBanner.getAnimationDuration());
+          }, AlertBanner.getAnimationDuration()));
         }
       }
 
@@ -195,13 +194,14 @@ module.run(['$templateCache', function($templateCache) {
       function onMessage(event, data) {
         clearQueue();
 
+        angular.copy(_options, $scope.alert);
         angular.extend($scope.alert, data);
 
         $el[0].querySelector('.' + AlertBanner.getClassName()).classList.add('active');
 
-        $timeout(function() {
+        queue.push($timeout(function() {
           $scope.alert.onOpen();
-        }, AlertBanner.getAnimationDuration());
+        }, AlertBanner.getAnimationDuration()));
 
         if ($scope.alert.autoClose) {
           queue.push($timeout(function() {
@@ -218,6 +218,7 @@ module.run(['$templateCache', function($templateCache) {
         queue.forEach(function(promise) {
           $timeout.cancel(promise);
         });
+        queue = [];
       }
     }
 
@@ -257,6 +258,7 @@ module.run(['$templateCache', function($templateCache) {
 
     var timeCollapse = 5000;
     var autoClose = true;
+
     var onOpen = function() {};
     var onClose = function() {};
 
@@ -353,10 +355,14 @@ module.run(['$templateCache', function($templateCache) {
 
       /**
        * @name   publish
-       * @desc   Publish events to alert controller
-       * @param  {object} params
-       * @param  {object} params.type
-       * @param  {object} params.message
+       * @desc   Publish    dispatch event to handle directive
+       * @param  {object}   params
+       * @param  {string}   params.type
+       * @param  {string}   params.message
+       * @param  {integer}  params.timeCollapse
+       * @param  {boolean}  params.autoClose
+       * @param  {function} params.onOpen
+       * @param  {function} params.onClose
        */
       function publish(params) {
         $rootScope.$broadcast(ALERT_BANNER.EVENTS.PREFIX + ALERT_BANNER.EVENTS.TYPES.PUBLISH, params);
