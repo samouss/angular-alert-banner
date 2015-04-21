@@ -24,7 +24,6 @@
       var queue = [];
 
       $scope.alert = {};
-      angular.copy(_options, $scope.alert);
       $scope.className = AlertBanner.getClassName();
 
       $scope.close = close;
@@ -39,10 +38,10 @@
         if ($el[0].querySelector('.' + AlertBanner.getClassName()).classList.contains('active')) {
           clearQueue();
           $el[0].querySelector('.' + AlertBanner.getClassName()).classList.remove('active');
-          $timeout(function() {
+          queue.push($timeout(function() {
             $scope.alert.onClose();
             angular.copy(_options, $scope.alert);
-          }, AlertBanner.getAnimationDuration());
+          }, AlertBanner.getAnimationDuration()));
         }
       }
 
@@ -55,13 +54,14 @@
       function onMessage(event, data) {
         clearQueue();
 
+        angular.copy(_options, $scope.alert);
         angular.extend($scope.alert, data);
 
         $el[0].querySelector('.' + AlertBanner.getClassName()).classList.add('active');
 
-        $timeout(function() {
+        queue.push($timeout(function() {
           $scope.alert.onOpen();
-        }, AlertBanner.getAnimationDuration());
+        }, AlertBanner.getAnimationDuration()));
 
         if ($scope.alert.autoClose) {
           queue.push($timeout(function() {
@@ -78,6 +78,7 @@
         queue.forEach(function(promise) {
           $timeout.cancel(promise);
         });
+        queue = [];
       }
     }
 
