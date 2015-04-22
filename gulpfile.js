@@ -18,6 +18,7 @@ var ngHtml2Js = require("gulp-ng-html2js");
 var es = require('event-stream');
 var sass = require('gulp-ruby-sass');
 var minifyCSS = require('gulp-minify-css');
+var babel = require('gulp-babel');
 
 var banner = ['/**',
   ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -70,7 +71,10 @@ function js() {
 
   return gulp.src(files)
     .pipe(plumber())
-    .pipe(jshint())
+    .pipe(jshint({
+      esnext: true
+    }))
+    .pipe(babel())
     .pipe(notify(function (file) {
       if (!file.jshint.success) {
         var errors = file.jshint.results.map(function (data) {
