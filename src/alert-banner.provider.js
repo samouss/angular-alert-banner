@@ -1,92 +1,79 @@
-(function() {
+(() => {
 
   'use strict';
 
-   /**
-    * @name AlertBannerProvider
-    * @desc Provider for alert banner
-    */
-  function AlertBannerProvider() {
+  /**
+  * @name AlertBannerProvider
+  * @desc Provider for alert banner
+  */
+  class AlertBannerProvider {
 
-    var AlertBanner = {};
+    constructor() {
+      this.className = 'alert-message';
+      this.animationDuration = 250;
 
-    var className = 'alert-message';
-    var animationDuration = 250;
+      this.timeCollapse = 5000;
+      this.autoClose = true;
 
-    var timeCollapse = 5000;
-    var autoClose = true;
-
-    var onOpen = function() {};
-    var onClose = function() {};
-
-    this.setClassName = setClassName;
-    this.setAnimationDuration = setAnimationDuration;
-
-    this.setTimeCollapse = setTimeCollapse;
-    this.setAutoClose = setAutoClose;
-
-    this.$get = $get;
+      this.onOpen = () => {};
+      this.onClose = () => {};
+    }
 
     /**
-     * @name  setClassName
+     * [setClassName]
      * @param {string} value
      * return AlertBannerProvider
      */
-    function setClassName(value) {
-      /* jshint validthis: true */
+    setClassName(value) {
       if (typeof value !== 'string') {
         throw new Error('String value is provide for parameter className');
       }
 
-      className = value;
+      this.className = value;
 
       return this;
     }
 
     /**
-     * @name  setTimeCollapse
-     * @param {string} value
+     * [setTimeCollapse]
+     * @param {integer} value
      * return AlertBannerProvider
      */
-    function setTimeCollapse(value) {
-      /* jshint validthis: true */
+    setTimeCollapse(value) {
       if (typeof value !== 'number') {
         throw new Error('Number value is provide for parameter timeCollapse');
       }
 
-      timeCollapse = value;
+      this.timeCollapse = value;
 
       return this;
     }
 
     /**
-     * @name  setAnimationDuration
-     * @param {string} value
+     * [setAnimationDuration]
+     * @param {integer} value
      * return AlertBannerProvider
      */
-    function setAnimationDuration(value) {
-      /* jshint validthis: true */
+    setAnimationDuration(value) {
       if (typeof value !== 'number') {
         throw new Error('Number value is provide for parameter animationDuration');
       }
 
-      animationDuration = value;
+      this.animationDuration = value;
 
       return this;
     }
 
     /**
-     * @name  setAutoClose
+     * [setAutoClose description]
      * @param {boolean} value
-     * return AlertBannerProvider
      */
-    function setAutoClose(value) {
-      /* jshint validthis: true */
+    setAutoClose(value) {
       if (typeof value !== 'boolean') {
         throw new Error('Boolean value is provide for parameter autoClose');
       }
 
-      autoClose = value;
+      this.autoClose = value;
 
       return this;
     }
@@ -96,66 +83,57 @@
      * @desc   AlertBanner factory for dispatch events alert
      * @param  {constant}   ALERT_BANNER
      * @param  {$rootScope} $rootScope
+     * @ngInject
      */
-    $get.$inject = ['ALERT_BANNER', '$rootScope'];
-    function $get(ALERT_BANNER, $rootScope) {
+    $get(ALERT_BANNER, $rootScope) {
+      return {
+        TYPES: ALERT_BANNER.TYPES,
 
-      AlertBanner.TYPES = ALERT_BANNER.TYPES;
+        /**
+         * @name   publish
+         * @desc   Publish    dispatch event to handle directive
+         * @param  {object}   params
+         * @param  {string}   params.type
+         * @param  {string}   params.message
+         * @param  {integer}  params.timeCollapse
+         * @param  {boolean}  params.autoClose
+         * @param  {function} params.onOpen
+         * @param  {function} params.onClose
+         */
+        publish: (params) => {
+          $rootScope.$broadcast(ALERT_BANNER.EVENTS.PREFIX + ALERT_BANNER.EVENTS.TYPES.PUBLISH, params);
+        },
 
-      AlertBanner.publish = publish;
-      AlertBanner.getClassName = getClassName;
-      AlertBanner.getAnimationDuration = getAnimationDuration;
+        /**
+         * @name   getClassName
+         * @return {string}
+         */
+        getClassName: () => {
+          return this.className;
+        },
 
-      AlertBanner.getDefaultOptions = getDefaultOptions;
+        /**
+         * @name   getAnimationDuration
+         * @return {string}
+         */
+        getAnimationDuration: () => {
+          return this.animationDuration;
+        },
 
-      return AlertBanner;
-
-      /**
-       * @name   publish
-       * @desc   Publish    dispatch event to handle directive
-       * @param  {object}   params
-       * @param  {string}   params.type
-       * @param  {string}   params.message
-       * @param  {integer}  params.timeCollapse
-       * @param  {boolean}  params.autoClose
-       * @param  {function} params.onOpen
-       * @param  {function} params.onClose
-       */
-      function publish(params) {
-        $rootScope.$broadcast(ALERT_BANNER.EVENTS.PREFIX + ALERT_BANNER.EVENTS.TYPES.PUBLISH, params);
-      }
-
-      /**
-       * @name   getClassName
-       * @return {string}
-       */
-      function getClassName() {
-        return className;
-      }
-
-      /**
-       * @name   getAnimationDuration
-       * @return {string}
-       */
-      function getAnimationDuration() {
-        return animationDuration;
-      }
-
-      /**
-       * @name   getDefaultOptions
-       * @return {object}
-       */
-      function getDefaultOptions() {
-        return {
-          timeCollapse: timeCollapse,
-          autoClose: autoClose,
-          onOpen: onOpen,
-          onClose: onClose
-        };
-      }
-
+        /**
+         * @name   getDefaultOptions
+         * @return {object}
+         */
+        getDefaultOptions: () => {
+          return {
+            timeCollapse: this.timeCollapse,
+            autoClose: this.autoClose,
+            onOpen: this.onOpen,
+            onClose: this.onClose
+          };
+        }
+      };
     }
-
   }
 
   angular
