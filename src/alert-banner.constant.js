@@ -1,4 +1,4 @@
-(function() {
+(() => {
 
   angular
     .module('angular-alert-banner')
