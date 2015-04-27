@@ -1,6 +1,6 @@
 # Angular Alert Banner
 
-Angular module for display alert as banner.
+Angular module for display alert message as banner.
 
 See demo [here](http://samouss.github.io/angular-alert-banner/#)
 
