@@ -67,6 +67,7 @@ var defaults = {
 function js() {
   var files = [];
 
+  files.push(path.join(defaults.js.source_dir, '*.utils.js'));
   files.push(path.join(defaults.js.source_dir, '*.module.js'));
   files.push(path.join(defaults.js.source_dir, '*.js'));
 
