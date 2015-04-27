@@ -18,6 +18,8 @@ var ngHtml2Js = require("gulp-ng-html2js");
 var es = require('event-stream');
 var sass = require('gulp-ruby-sass');
 var minifyCSS = require('gulp-minify-css');
+var babel = require('gulp-babel');
+var ngAnnotate = require('gulp-ng-annotate');
 
 var banner = ['/**',
   ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -65,12 +67,17 @@ var defaults = {
 function js() {
   var files = [];
 
+  files.push(path.join(defaults.js.source_dir, '*.utils.js'));
   files.push(path.join(defaults.js.source_dir, '*.module.js'));
   files.push(path.join(defaults.js.source_dir, '*.js'));
 
   return gulp.src(files)
     .pipe(plumber())
-    .pipe(jshint())
+    .pipe(jshint({
+      esnext: true
+    }))
+    .pipe(babel())
+    .pipe(ngAnnotate())
     .pipe(notify(function (file) {
       if (!file.jshint.success) {
         var errors = file.jshint.results.map(function (data) {
