@@ -47,6 +47,7 @@
 
   angular
     .module('app', [
+      'ngSanitize',
       'angular-alert-banner'
     ])
     .controller('AppController', [

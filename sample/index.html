@@ -14,6 +14,10 @@
       font-size: 3.5rem;
       color: #000;
     }
+    .float-left {
+      float: none !important;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body ng-controller="AppController as vm">
@@ -26,7 +30,7 @@
     <div class="jumbotron">
       <h2>Angular Alert Banner <a class="pull-right link-github" href="https://github.com/samouss/angular-alert-banner"><i class="fa fa-github"></i></a></h2>
       <p>Click on the link for display the banner !</p>
-      <p>
+      <a>
 
         <a
           href="#"
@@ -34,6 +38,13 @@
           role="button"
           ng-click="vm.display(vm.TYPES.INFO, 'Info message')"
         >Alert info !</a>
+
+        <a
+            href="#"
+            class="btn btn-primary btn-lg"
+            role="button"
+            ng-click="vm.display(vm.TYPES.INFO, 'This message contains a <a class=float-left target=_blank href=https://github.com/samouss/angular-alert-banner>link</a>')"
+            >HTML Example !</a>
 
         <a
           href="#"
@@ -73,6 +84,7 @@
   </div>
 
   <script src="/bower_components/angular/angular.min.js"></script>
+  <script src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
   <script src="/dist/angular-alert-banner.js"></script>
   <script src="/app.js"></script>
 </body>
